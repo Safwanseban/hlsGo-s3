@@ -6,20 +6,22 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type AppServer struct {
-	App *fiber.App
+type AppHandler struct {
 }
 
-func NewServer(app *fiber.App) {
-	server := &AppServer{
-		App: app,
-	}
-	server.App.Get("", server.StoreVideo)
+func NewServer(app *fiber.App) HandlerMethods {
+	Handler := &AppHandler{}
+	app.Get("", Handler.StoreVideo)
+	return Handler
 
 }
-func (s *AppServer) StoreVideo(ctx *fiber.Ctx) error {
+func (s *AppHandler) StoreVideo(ctx *fiber.Ctx) error {
 	ctx.Status(http.StatusOK).JSON(fiber.Map{
 		"ping": "pong",
 	})
 	return nil
+}
+
+type HandlerMethods interface {
+	StoreVideo(*fiber.Ctx) error
 }
